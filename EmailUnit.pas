@@ -628,9 +628,10 @@ begin
        //showmessage(E.ClassName+' поднята ошибка, с сообщением : '+E.Message);
       result:=4; //another error
        if Pos('timeout exceeded',E.Message)>0 then Result:=2;//Error: timeout exceeded
-       //if Pos('SPAM',E.Message)>0 then Result:=1;//Error: SPAM
+       if Pos('SPAM',E.Message)>0 then Result:=1;//Error: SPAM
        if Pos('Socket Error',E.Message)>0 then Result:=6;//internet non found
        if Pos('invalid mailbox',E.Message)>0 then Result:=7;//user not found
+       if Pos('spam message rejected',E.Message)>0 then Result:=12;//spam message reject
        if Pos('recipient verification failed',E.Message)>0 then Result:=2;//user not found
        if Pos('authentication failed',E.Message)>0 then Result:=11;//Error: разрешение для почтовых программ
        if Pos('Try again later',E.Message)>0 then Result:=8;//Too many message from

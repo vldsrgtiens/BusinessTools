@@ -891,6 +891,22 @@ begin
 
         StopMultySendEmails;
        end;
+    12: begin  //Error
+        SLog(Info,DateTimeToStr(Now)+ ' Error: №12: '+RRecipientEmail+' почовый сервер не принял письмо с подозрением на спам');
+         DM.FDQueryEmailDB.Active:=true;
+         DM.FDQueryEmailDB.Locate('Email',RRecipientEmail,[]);
+         DM.FDQueryEmailDB.Edit;
+           case CurrentTypeLetter of
+            Work: DM.FDQueryEmailDB.FieldByName('LastDateEmailWork').AsDateTime:=IncDay(Now,-1*(FSettingsEmail.EmailCountEmailsSendInDay-2));
+            Diagnost: DM.FDQueryEmailDB.FieldByName('LastDateEmailDiag').AsDateTime:=IncDay(Now,-1*(FSettingsEmail.EmailCountEmailsSendInDay-2));
+            Another: DM.FDQueryEmailDB.FieldByName('LastDateEmailAnother').AsDateTime:=IncDay(Now,-1*(FSettingsEmail.EmailCountEmailsSendInDay-2));
+           end;
+         //DM.FDQueryEmailDB.FieldByName('StatusEmail').AsString:='Error';
+         DM.FDQueryEmailDB.Post;
+         MemoSendingEmails.Lines.Add(DateTimeToStr(Now)+' Error: '+ RRecipientEmail+' почовый сервер не принял письмо с подозрением на спам');
+         TimerSendEmail.Interval:=200;
+         TimerSendEmail.Enabled:=true;
+       end;
    end;
   end
  else
